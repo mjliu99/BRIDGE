@@ -1,4 +1,4 @@
-# /root/autodl-tmp/BrainMoE-02/main.py
+# /root/autodl-tmp/BRIDGE-02/main.py
 import argparse
 import json
 import random
@@ -24,7 +24,7 @@ from torch_geometric.data import Data
 from torch_geometric.loader import DataLoader
 
 from src.utils import get_subjects
-from networks.BrainMoe import BrainMoE
+from networks.BRIDGE import BRIDGE
 
 
 DATASET_PATH = Path("./data")
@@ -947,7 +947,7 @@ def set_router_schedule(model, epoch: int, final_top_k: int):
 # main
 # =========================================================
 def main():
-    parser = argparse.ArgumentParser("BrainMoE main")
+    parser = argparse.ArgumentParser("BRIDGE main")
 
     parser.add_argument("--dataset", type=str, default="ADHD", help="ADHD or ABIDE")
     parser.add_argument("--seed", type=int, default=42)
@@ -1012,19 +1012,19 @@ def main():
     parser.add_argument(
         "--aal_xlsx",
         type=str,
-        default="/home/xinyangzhao/Mujie/BrainMoe/isdt/AAL.xlsx",
+        default="/home/xinyangzhao/Mujie/BRIDGE/isdt/AAL.xlsx",
         help="AAL.xlsx path; E column used as network labels",
     )
     parser.add_argument(
         "--llm_cache_dir",
         type=str,
-        default="/home/xinyangzhao/Mujie/BrainMoe/data/abnormal_llm_cache",
+        default="/home/xinyangzhao/Mujie/BRIDGE/data/abnormal_llm_cache",
         help="Contains <dataset>/stage1_emb_by_idx.pt and stage2_emb_by_idx.pt",
     )
     parser.add_argument(
         "--results_dir",
         type=str,
-        default="results_brainmoe_identity",
+        default="results_BRIDGE_identity",
     )
 
     args = parser.parse_args()
@@ -1159,7 +1159,7 @@ def main():
     results_dir = Path(args.results_dir)
     results_dir.mkdir(parents=True, exist_ok=True)
 
-    model_tag = "BrainMoE"
+    model_tag = "BRIDGE"
     model_tag += "_node_identity" if args.use_identity else "_no_identity"
     model_tag += "_with_stage1" if args.use_llm_stage1 else ""
     model_tag += "_with_stage2" if args.use_llm_stage2 else ""
@@ -1187,7 +1187,7 @@ def main():
         cw, cc = class_weight_from_indices(all_data, train_idx, device)
         print(f"[CLASS] counts={cc.tolist()} | weights={cw.tolist()}")
 
-        model = BrainMoE(
+        model = BRIDGE(
             in_dim=in_dim,
             hidden_dim=args.hidden_dim,
             identity_dim=identity_dim,
