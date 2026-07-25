@@ -52,8 +52,7 @@ python list_models.py \
   --llm_workers 1 \
   --emb_workers 2 \
   --topk_edges 20 \
-  --topk_rois 10 Can you please provide me with access to this document?
-
+  --topk_rois 10 \
   --pack_tar
 ```
 
