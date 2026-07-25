@@ -1,6 +1,6 @@
-# BrainMoE
+# BRIDGE
 
-BrainMoE is a brain graph learning framework for psychiatric disorder analysis.  
+BRIDGE (previously named BrainMoE) is a brain graph learning framework for psychiatric disorder analysis.  
 It combines identity-aware structural representations with **LLM-guided** mixture-of-experts routing to support interpretable graph learning on brain network data.
 
 Currently, this repository supports experiments on:
@@ -15,8 +15,8 @@ Currently, this repository supports experiments on:
 We recommend using Conda.
 
 ```bash
-conda create -n brainmoe python=3.12
-conda activate brainmoe
+conda create -n BRIDGE python=3.12
+conda activate BRIDGE
 
 pip install torch==2.8.0 torchvision==0.23.0 torchaudio==2.8.0 --index-url https://download.pytorch.org/whl/cu129
 pip install torch-geometric==2.7.0
@@ -29,7 +29,7 @@ pip install -r requirements.txt
 
 ## LLM Cache Generation
 
-BrainMoE supports generating subject-level LLM reasoning outputs and text embeddings in advance, so that downstream training can directly load cached results instead of repeatedly querying the LLM.
+BRIDGE supports generating subject-level LLM reasoning outputs and text embeddings in advance, so that downstream training can directly load cached results instead of repeatedly querying the LLM.
 
 The generated cache is typically stored under:
 
@@ -52,7 +52,8 @@ python list_models.py \
   --llm_workers 1 \
   --emb_workers 2 \
   --topk_edges 20 \
-  --topk_rois 10 \
+  --topk_rois 10 Can you please provide me with access to this document?
+
   --pack_tar
 ```
 
@@ -91,8 +92,8 @@ This script generates global abnormality-driven LLM outputs with ISDT ablated.
 ```bash
 python list_models.py `
   --dataset ADHD `
-  --cached_pt "D:\code\BrainMoE-02\data\preprocessed_subjects\ADHD_cached.pt" `
-  --aal_xlsx "D:\code\BrainMoE-02\isdt\AAL.xlsx" `
+  --cached_pt "D:\code\BRIDGE-02\data\preprocessed_subjects\ADHD_cached.pt" `
+  --aal_xlsx "D:\code\BRIDGE-02\isdt\AAL.xlsx" `
   --n_splits 5 --seed 0 --val_ratio 0.1 `
   --llm_workers 1 --emb_workers 2 `
   --topk_edges 20 --topk_rois 10 `
@@ -106,7 +107,7 @@ The overall workflow is:
 preprocess subject data into *_cached.pt
 generate LLM reasoning outputs and embeddings into data/abnormal_llm_cache/...
 run main.py
-during training, BrainMoE loads the cached LLM outputs and embeddings instead of re-calling the LLM
+during training, BRIDGE loads the cached LLM outputs and embeddings instead of re-calling the LLM
 
 In other words, the LLM data is produced offline first, then consumed during model training.
 
@@ -193,7 +194,7 @@ python main.py \
   --use_identity \
   --use_llm_stage1 \
   --use_llm_stage2 \
-  --results_dir results_brainmoe_ABIDE_llm_both_lr5e4
+  --results_dir results_BRIDGE_ABIDE_llm_both_lr5e4
 ```
 Final 5-fold summary on ABIDE:
 
@@ -214,20 +215,20 @@ This repository includes scripts for subject-level routing extraction, stability
 ADHD
 ```bash
 python build_routing_subject_level_from_accuracy_node_pt.py \
-  --results_dir results_brainmoe_identity \
+  --results_dir results_BRIDGE_identity \
   --dataset ADHD \
   --aal_xlsx isdt/AAL.xlsx \
-  --out_csv results_brainmoe_identity/network_expert_arrays/routing_subject_level_accuracy_soft_with_fold_ADHD.csv \
+  --out_csv results_BRIDGE_identity/network_expert_arrays/routing_subject_level_accuracy_soft_with_fold_ADHD.csv \
   --use_soft
 ```
 
 ABIDE
 ```bash
 python build_routing_subject_level_from_accuracy_node_pt.py \
-  --results_dir results_brainmoe_ABIDE_identity_stage1_stage2 \
+  --results_dir results_BRIDGE_ABIDE_identity_stage1_stage2 \
   --dataset ABIDE \
   --aal_xlsx isdt/AAL.xlsx \
-  --out_csv results_brainmoe_ABIDE_identity_stage1_stage2/network_expert_arrays/routing_subject_level_accuracy_soft_with_fold_ABIDE.csv \
+  --out_csv results_BRIDGE_ABIDE_identity_stage1_stage2/network_expert_arrays/routing_subject_level_accuracy_soft_with_fold_ABIDE.csv \
   --use_soft
 ```
 
@@ -236,8 +237,8 @@ python build_routing_subject_level_from_accuracy_node_pt.py \
 ADHD
 ```bash
 python analyze_routing_stability.py \
-  --csv results_brainmoe_identity/network_expert_arrays/routing_subject_level_accuracy_soft_with_fold_ADHD.csv \
-  --outdir results_brainmoe_identity/routing_stability_accuracy_soft \
+  --csv results_BRIDGE_identity/network_expert_arrays/routing_subject_level_accuracy_soft_with_fold_ADHD.csv \
+  --outdir results_BRIDGE_identity/routing_stability_accuracy_soft \
   --networks SMN,DMN,FPN,DAN,VN,LIN,SBN,VAN,CBL \
   --experts mlp,cheb,gt,gcn \
   --n_boot 2000 \
@@ -247,8 +248,8 @@ python analyze_routing_stability.py \
 ABIDE
 ```bash
 python analyze_routing_stability.py \
-  --csv results_brainmoe_ABIDE_identity_stage1_stage2/network_expert_arrays/routing_subject_level_accuracy_soft_with_fold_ABIDE.csv \
-  --outdir results_brainmoe_ABIDE_identity_stage1_stage2/routing_stability_accuracy_soft \
+  --csv results_BRIDGE_ABIDE_identity_stage1_stage2/network_expert_arrays/routing_subject_level_accuracy_soft_with_fold_ABIDE.csv \
+  --outdir results_BRIDGE_ABIDE_identity_stage1_stage2/routing_stability_accuracy_soft \
   --networks SMN,DMN,FPN,DAN,VN,LIN,SBN,VAN,CBL \
   --experts mlp,cheb,gt,gcn \
   --n_boot 2000 \
@@ -259,8 +260,8 @@ python analyze_routing_stability.py \
 ADHD
 ```bash
 python plot_neurips_routing_manifold.py \
-  --result_dir results_brainmoe_identity/routing_stability_accuracy_soft \
-  --save_dir results_brainmoe_identity/routing_figures_neurips_clean \
+  --result_dir results_BRIDGE_identity/routing_stability_accuracy_soft \
+  --save_dir results_BRIDGE_identity/routing_figures_neurips_clean \
   --networks SMN,DMN,FPN,DAN,VN,LIN,SBN,VAN,CBL \
   --experts mlp,cheb,gt,gcn \
   --fontsize 13 \
@@ -270,8 +271,8 @@ python plot_neurips_routing_manifold.py \
 ABIDE
 ```bash
 python plot_neurips_routing_manifold.py \
-  --result_dir results_brainmoe_ABIDE_identity_stage1_stage2/routing_stability_accuracy_soft \
-  --save_dir results_brainmoe_ABIDE_identity_stage1_stage2/routing_figures_neurips_clean \
+  --result_dir results_BRIDGE_ABIDE_identity_stage1_stage2/routing_stability_accuracy_soft \
+  --save_dir results_BRIDGE_ABIDE_identity_stage1_stage2/routing_figures_neurips_clean \
   --networks SMN,DMN,FPN,DAN,VN,LIN,SBN,VAN,CBL \
   --experts mlp,cheb,gt,gcn \
   --fontsize 13 \
